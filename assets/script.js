@@ -16,8 +16,10 @@ function submitEventHandler (event) {
 
   const userSearchInput = $userSearchInput.val();
   
+  //Oh hey should probably look into query parameters for Imperial Units so then I don't have to convert :)
   const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userSearchInput}&appid=${apiKey}`;
 
+  //History data being worked here...
   const $historyDiv = $(".history")
   const $a = $('<a>')
 
@@ -25,8 +27,8 @@ function submitEventHandler (event) {
   $a.text(userSearchInput)
   $a.attr("data-history", userSearchInput)
 
-
   $historyDiv.append($a)
+
 
   console.log("Form Clicked")
   console.log(userSearchInput)
@@ -107,7 +109,8 @@ function renderDivs(data) {
 
 // This will render the 5 day forecast..
   function renderDivs5(data5) {
-    //console.log(data5)
+
+    console.log(data5)
     //const day0 = data5.list[0]
     const day1 = data5.list[7]
     const day2 =data5.list[15]
@@ -115,16 +118,64 @@ function renderDivs(data) {
     const day4 =data5.list[31]
     const day5 =data5.list[39]
 
-    
+/* This is here for reference :)
+    const dataWeather = JSON.stringify( data.weather[0].description)
+    const dataTemp = JSON.stringify( data.main.temp)
+    const dataName = data.name
+    const dataIcon = data.weather[0].icon
+    const dataHumidity = JSON.stringify(data.main.humidity)
+*/
 
+    //day1 Variables :') 
+    const $day1DateText = day1.dt_txt
+    const $day1Temp = day1.main.temp
+    const $day1Humid = day1.main.humidity
+    const $day1Desc = day1.weather[0].description
+    const $day1Icon = day1.weather[0].icon
     
+    const $divCard = $('<div>')
+    //const $divCardBody = $('<div>')
+    const $img = $('<img>')
+    const $h4 = $('<h4>')
+    //const $pDate = $('<p>')
+    const $pWeather = $('<p>')
+    const $pTemperature = $('<p>')
+    const $pHumidity = $('<p>')
+
+
+    const $resultsDiv5 = $('#resultsDiv5')
+    
+    //The magical clearing of resultsDiv5
+    $resultsDiv5.html('')
+
     //console.log(data5.list[0])
     console.log(day1)
-    console.log(day2)
-    console.log(day3)
-    console.log(day4)
-    console.log(day5)
-    
+    //console.log(day2)
+    //console.log(day3)
+    //console.log(day4)
+    //console.log(day5)
+
+    $divCard.addClass("card-body")
+    $h4.addClass("card-heading")
+    $img.addClass("weather-icon")
+    //$pDate.addClass("card-text")
+    $pWeather.addClass("card-text")
+    $pTemperature.addClass("card-text")
+    $pHumidity.addClass("card-text")
+
+    $h4.text($day1DateText)
+    $img.attr("src", `https://openweathermap.org/img/wn/${$day1Icon}.png`)
+    $pWeather.text(`Description: `+$day1Desc)
+    $pTemperature.text($day1Temp+`°F`)
+    $pHumidity.text($day1Humid+`%`)
+
+    $resultsDiv5.append($divCard)
+    $divCard.append($h4)
+    $divCard.append($img)
+    $divCard.append($pWeather)
+    $divCard.append($pTemperature)
+    $divCard.append($pHumidity)
+
   }
 
 // This is the first API request. it uses this data to send to renderDivs, also sends it to getAPI2 (5day Forecast)
@@ -168,7 +219,7 @@ function getAPI2(data){
       return serverResponse.json();
     }
   })
-  .then(function(data5) {
+  .then(function(data5) { //data5 is so cool
     renderDivs5(data5);
   })
 }
