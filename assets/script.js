@@ -28,35 +28,7 @@ function submitEventHandler (event) {
 
   $historyDiv.append($a)
 
-  // Ye Olde History Button Event Listener
-  $('.history-btn').on("click", function(event) {
-    event.preventDefault()
 
-    
-    
-    //console.log("History Clicked I wanna be "+userSearchInput)
-
-/* This doesn't return errors but doesn't function correctly...
-    fetch(requestUrl)
-
-    .then(function(serverResponse) {
-      if (serverResponse.status === 404) {
-        alert("Not a real city");
-      } else {
-      return serverResponse.json();
-      }
-    })
-    .then(function(data) {
-
-      renderDivs(data);
-      getAPI2(data);
-    })
-*/
-  //This functions as intended but returns errors...
-    getAPI(requestUrl)
-    renderDivs()
-    renderDivs5()
-  })
 
   getAPI(requestUrl)
 }
@@ -394,6 +366,15 @@ function getAPI2(data){
     renderDivs5(data5);
   })
 }
+
+  //History Button Event Listener - when user clicks on history button runs the api again
+  $('#buttonsList').on("click", ".history-btn" , function(event) {
+    event.preventDefault()
+
+    const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${$(this).attr("data-history")}&appid=${apiKey}&units=imperial`;
+
+    getAPI(requestUrl)
+  })
 
 $userSearchForm.submit("submit", submitEventHandler)
 
