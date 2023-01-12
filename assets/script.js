@@ -14,15 +14,13 @@ function submitEventHandler (event) {
 
   const userSearchInput = $userSearchInput.val();
   
-  //Oh hey should probably look into query parameters for Imperial Units so then I don't have to convert :)
-  const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userSearchInput}&appid=${apiKey}`;
+  const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${userSearchInput}&appid=${apiKey}&units=imperial`;
 
-  //History data being worked here...Still needs click functionality and send to local storage
+  //History data being worked here...
   const $historyDiv = $(".history")
   const $a = $('<a>')
 
   $a.addClass("list-group-item list-group-item-action")
-
   $a.addClass("history-btn")
 
   $a.text(userSearchInput)
@@ -30,12 +28,13 @@ function submitEventHandler (event) {
 
   $historyDiv.append($a)
 
+  // Ye Olde History Button Event Listener
   $('.history-btn').on("click", function(event) {
     event.preventDefault()
 
     
     
-    console.log("History Clicked I wanna be "+userSearchInput)
+    //console.log("History Clicked I wanna be "+userSearchInput)
 
 /* This doesn't return errors but doesn't function correctly...
     fetch(requestUrl)
@@ -59,7 +58,6 @@ function submitEventHandler (event) {
     renderDivs5()
   })
 
-
   getAPI(requestUrl)
 }
 
@@ -67,15 +65,15 @@ function submitEventHandler (event) {
 //Renders current weather search
 function renderDivs(data) {
 
-    console.log(data)
     //clears everything before every render
     $resultsDiv.html('')
   
-    const dataWeather = JSON.stringify( data.weather[0].description)
+    const dataWeather = data.weather[0].description
     const dataTemp = JSON.stringify( data.main.temp)
     const dataName = data.name
     const dataIcon = data.weather[0].icon
     const dataHumidity = JSON.stringify(data.main.humidity)
+    const dataWind = data.wind.speed
 
     const $divCard = $('<div>')
     const $divCardBody = $('<div>')
@@ -86,8 +84,10 @@ function renderDivs(data) {
     const $pWeather = $('<p>')
     const $pTemperature = $('<p>')
     const $pHumidity = $('<p>')
+    const $pWind = $('<p>')
 
-    const dataTempConvert = Math.round((dataTemp - 273.15) * (9/5) + 32);
+    //(0K − 273.15) × 9/5 + 32 = Farenheit degrees
+    //const dataTempConvert = Math.round((dataTemp - 273.15) * (9/5) + 32);
 
     $divCard.addClass("card text-start")
     $divCard.attr("style", "width: 24rem")
@@ -103,15 +103,11 @@ function renderDivs(data) {
 
     $h4.text(dataName)
     $pDate.text(currentDate)
-    $pWeather.text(`Currently: `+dataWeather)
-    $pTemperature.text(`Temperature: `+dataTempConvert+`°F`)
+    $pWeather.text(`Description: `+dataWeather)
+    $pTemperature.text(`Temperature: `+Math.round(dataTemp)+`°F`)
     $pHumidity.text(`Humidity: `+dataHumidity+'%')
+    $pWind.text(`Wind Speed: `+dataWind+` mph`)
 
-    //(0K − 273.15) × 9/5 + 32 = Farenheit degrees
-    //((dataMain - 273.15) * (9/5) + 32)
-    /*
-    $divCard.text("The Weather in "+dataName+ " is "+dataWeather+" The Temperature is "+Math.round((dataMain - 273.15) * (9/5) + 32)+" degrees Farenheit. The humidity is "+ dataHumidity+"%");
-    */
     $resultsDiv.append($divCard)
     $divCard.append($divCardBody)
     $divCardBody.append($h4)
@@ -120,16 +116,13 @@ function renderDivs(data) {
     $divCardBody.append($pWeather)
     $divCardBody.append($pTemperature)
     $divCardBody.append($pHumidity)
+    $divCardBody.append($pWind)
     
-    //console.log("The selected City is " +dataName)
-    //console.log(data)
-    //console.log("icon data: "+dataIcon)
-
   }
+
 
 // This will render the 5 day forecast..
   function renderDivs5(data5) {
-    //console.log(data5)
 
     //VARIABLES!
     const day1 = data5.list[7]
@@ -138,21 +131,14 @@ function renderDivs(data) {
     const day4 =data5.list[31]
     const day5 =data5.list[39]
 
-/* This is here for reference :)
-    const dataWeather = JSON.stringify( data.weather[0].description)
-    const dataTemp = JSON.stringify( data.main.temp)
-    const dataName = data.name
-    const dataIcon = data.weather[0].icon
-    const dataHumidity = JSON.stringify(data.main.humidity)
-*/
-
     //day1 Variables :') 
     const $day1DateText = day1.dt_txt
     const $day1Temp = day1.main.temp
     const $day1Humid = day1.main.humidity
     const $day1Desc = day1.weather[0].description
     const $day1Icon = day1.weather[0].icon
-    
+    const $day1Wind = day1.wind.speed
+
     const $divCard1 = $('<div>')
     const $divCardBody1 = $('<div>')
     const $img1 = $('<img>')
@@ -160,6 +146,7 @@ function renderDivs(data) {
     const $pWeather1 = $('<p>')
     const $pTemperature1 = $('<p>')
     const $pHumidity1 = $('<p>')
+    const $pWind1 = $('<p>')
 
     //day2 Variables 
     const $day2DateText = day2.dt_txt
@@ -167,6 +154,7 @@ function renderDivs(data) {
     const $day2Humid = day2.main.humidity
     const $day2Desc = day2.weather[0].description
     const $day2Icon = day2.weather[0].icon
+    const $day2Wind = day2.wind.speed
     
     const $divCard2 = $('<div>')
     const $divCardBody2 = $('<div>')
@@ -175,6 +163,7 @@ function renderDivs(data) {
     const $pWeather2 = $('<p>')
     const $pTemperature2 = $('<p>')
     const $pHumidity2 = $('<p>')
+    const $pWind2 = $('<p>')
 
     //day3 Variables
     const $day3DateText = day3.dt_txt
@@ -182,6 +171,7 @@ function renderDivs(data) {
     const $day3Humid = day3.main.humidity
     const $day3Desc = day3.weather[0].description
     const $day3Icon = day3.weather[0].icon
+    const $day3Wind = day3.wind.speed
     
     const $divCard3 = $('<div>')
     const $divCardBody3 = $('<div>')
@@ -190,6 +180,7 @@ function renderDivs(data) {
     const $pWeather3 = $('<p>')
     const $pTemperature3 = $('<p>')
     const $pHumidity3 = $('<p>')
+    const $pWind3 = $('<p>')
 
     //day4 Variables
     const $day4DateText = day4.dt_txt
@@ -197,6 +188,7 @@ function renderDivs(data) {
     const $day4Humid = day4.main.humidity
     const $day4Desc = day4.weather[0].description
     const $day4Icon = day4.weather[0].icon
+    const $day4Wind = day4.wind.speed
     
     const $divCard4 = $('<div>')
     const $divCardBody4 = $('<div>')
@@ -205,6 +197,7 @@ function renderDivs(data) {
     const $pWeather4 = $('<p>')
     const $pTemperature4 = $('<p>')
     const $pHumidity4 = $('<p>')
+    const $pWind4 = $('<p>')
 
     //day5 Variables
     const $day5DateText = day5.dt_txt
@@ -212,6 +205,7 @@ function renderDivs(data) {
     const $day5Humid = day5.main.humidity
     const $day5Desc = day5.weather[0].description
     const $day5Icon = day5.weather[0].icon
+    const $day5Wind = day5.wind.speed
     
     const $divCard5 = $('<div>')
     const $divCardBody5 = $('<div>')
@@ -220,6 +214,7 @@ function renderDivs(data) {
     const $pWeather5 = $('<p>')
     const $pTemperature5 = $('<p>')
     const $pHumidity5 = $('<p>')
+    const $pWind5 = $('<p>')
 
     //Where it all goes...but what if there were more? or ..container5???
     const $resultsDiv5 = $('#resultsDiv5')
@@ -244,6 +239,7 @@ function renderDivs(data) {
     $pWeather1.text(`Description: `+$day1Desc)
     $pTemperature1.text(`Temperature: `+Math.round($day1Temp)+`°F`)
     $pHumidity1.text(`Humidity: `+$day1Humid+`%`)
+    $pWind1.text(`Wind Speed: `+$day1Wind+` mph`)
 
     //day2 Add Class + Text + Attr
     $divCard2.addClass("card text-start")
@@ -258,6 +254,7 @@ function renderDivs(data) {
     $pWeather2.text(`Description: `+$day2Desc)
     $pTemperature2.text(`Temperature: `+Math.round($day2Temp)+`°F`)
     $pHumidity2.text(`Humidity: `+$day2Humid+`%`)
+    $pWind2.text(`Wind Speed: `+$day2Wind+` mph`)
 
     //day3 Add Class +text + attr
     $divCard3.addClass("card text-start")
@@ -272,6 +269,7 @@ function renderDivs(data) {
     $pWeather3.text(`Description: `+$day3Desc)
     $pTemperature3.text(`Temperature: `+Math.round($day3Temp)+`°F`)
     $pHumidity3.text(`Humidity: `+$day3Humid+`%`)
+    $pWind3.text(`Wind Speed: `+$day3Wind+` mph`)
 
     //day4 Add Class + text +attr
     $divCard4.addClass("card text-start")
@@ -286,6 +284,7 @@ function renderDivs(data) {
     $pWeather4.text(`Description: `+$day4Desc)
     $pTemperature4.text(`Temperature: `+Math.round($day4Temp)+`°F`)
     $pHumidity4.text(`Humidity: `+$day4Humid+`%`)
+    $pWind4.text(`Wind Speed: `+$day4Wind+` mph`)
 
     //day5 Add Class + Text +attr
     $divCard5.addClass("card text-start")
@@ -300,11 +299,10 @@ function renderDivs(data) {
     $pWeather5.text(`Description: `+$day5Desc)
     $pTemperature5.text(`Temperature: `+Math.round($day5Temp)+`°F`)
     $pHumidity5.text(`Humidity: `+$day5Humid+`%`)
+    $pWind5.text(`Wind Speed: `+$day5Wind+` mph`)
 
     //APPEND IT ALL!
-
     $container5.append($resultsDiv5)
-
 
     //day1 appending
     $resultsDiv5.append($divCard1)
@@ -314,6 +312,7 @@ function renderDivs(data) {
     $divCardBody1.append($pWeather1)
     $divCardBody1.append($pTemperature1)
     $divCardBody1.append($pHumidity1)
+    $divCardBody1.append($pWind1)
 
     //day2 appending
     $resultsDiv5.append($divCard2)
@@ -323,6 +322,7 @@ function renderDivs(data) {
     $divCardBody2.append($pWeather2)
     $divCardBody2.append($pTemperature2)
     $divCardBody2.append($pHumidity2)
+    $divCardBody2.append($pWind2)
 
     //day3 appending
     $resultsDiv5.append($divCard3)
@@ -332,6 +332,7 @@ function renderDivs(data) {
     $divCardBody3.append($pWeather3)
     $divCardBody3.append($pTemperature3)
     $divCardBody3.append($pHumidity3)
+    $divCardBody3.append($pWind3)
 
     //day4 appending
     $resultsDiv5.append($divCard4)
@@ -341,6 +342,7 @@ function renderDivs(data) {
     $divCardBody4.append($pWeather4)
     $divCardBody4.append($pTemperature4)
     $divCardBody4.append($pHumidity4)
+    $divCardBody4.append($pWind4)
     
     //day5 appending
     $resultsDiv5.append($divCard5)
@@ -350,9 +352,7 @@ function renderDivs(data) {
     $divCardBody5.append($pWeather5)
     $divCardBody5.append($pTemperature5)
     $divCardBody5.append($pHumidity5)
-
-    console.log("Holy Guacamole")
-    console.log(dayjs($day1DateText).format('MMMM DD YYYY'))
+    $divCardBody5.append($pWind5)
 
   }
 
@@ -368,10 +368,6 @@ function getAPI(request) {
     }
   })
   .then(function(data) {
-    //console.log(data)
-    //console.log(data.main)
-    //console.log(data.weather)
-
     renderDivs(data);
     getAPI2(data);
   })
@@ -386,9 +382,6 @@ function getAPI2(data){
 
   const fiveDayURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 
-  //console.log('Lat: '+lat)
-  //console.log('Lon: '+lon)
-
   fetch (fiveDayURL)
   .then(function(serverResponse) {
     if (serverResponse.status !== 200) {
@@ -397,7 +390,7 @@ function getAPI2(data){
       return serverResponse.json();
     }
   })
-  .then(function(data5) { //data 5 is so cool
+  .then(function(data5) {
     renderDivs5(data5);
   })
 }
