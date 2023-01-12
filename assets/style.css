@@ -1,5 +1,42 @@
+/*
+
 * {
     border: 2px solid red;
     background-color: forestgreen;
     color:yellow;
+}
+
+*/
+
+h2 {
+    font-size: large;
+}
+
+h3 {
+    background-color: cornflowerblue;
+    color: white;
+    margin: 3%;
+    border-radius: 10px;
+    margin-left: 3%;
+    padding: 1%;
+}
+
+.text-start {
+    margin: 1%;
+}
+
+.card-body {
+    background-color: goldenrod;
+}
+
+
+.search-aside {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.navbar {
+    border: solid;
+    padding: 1%;
+
 }

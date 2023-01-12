@@ -22,22 +22,52 @@ function submitEventHandler (event) {
   const $a = $('<a>')
 
   $a.addClass("list-group-item list-group-item-action")
+
+  $a.addClass("history-btn")
+
   $a.text(userSearchInput)
   $a.attr("data-history", userSearchInput)
 
   $historyDiv.append($a)
 
+  $('.history-btn').on("click", function(event) {
+    event.preventDefault()
 
-  //console.log("Form Clicked")
-  //console.log(userSearchInput)
+    
+    
+    console.log("History Clicked I wanna be "+userSearchInput)
+
+/* This doesn't return errors but doesn't function correctly...
+    fetch(requestUrl)
+
+    .then(function(serverResponse) {
+      if (serverResponse.status === 404) {
+        alert("Not a real city");
+      } else {
+      return serverResponse.json();
+      }
+    })
+    .then(function(data) {
+
+      renderDivs(data);
+      getAPI2(data);
+    })
+*/
+  //This functions as intended but returns errors...
+    getAPI(requestUrl)
+    renderDivs()
+    renderDivs5()
+  })
+
 
   getAPI(requestUrl)
-
 }
 
 
 //Renders current weather search
 function renderDivs(data) {
+
+    console.log(data)
     //clears everything before every render
     $resultsDiv.html('')
   
@@ -191,8 +221,10 @@ function renderDivs(data) {
     const $pTemperature5 = $('<p>')
     const $pHumidity5 = $('<p>')
 
-    //Where it all goes...
+    //Where it all goes...but what if there were more? or ..container5???
     const $resultsDiv5 = $('#resultsDiv5')
+    const $container5 = $('#container5')
+    
     
     //The magical clearing of resultsDiv5
     $resultsDiv5.html('')
@@ -207,11 +239,11 @@ function renderDivs(data) {
     $pWeather1.addClass("card-text")
     $pTemperature1.addClass("card-text")
     $pHumidity1.addClass("card-text")
-    $h41.text($day1DateText)
+    $h41.text(dayjs($day1DateText).format('MMMM DD YYYY'))
     $img1.attr("src", `https://openweathermap.org/img/wn/${$day1Icon}.png`)
     $pWeather1.text(`Description: `+$day1Desc)
-    $pTemperature1.text($day1Temp+`°F`)
-    $pHumidity1.text($day1Humid+`%`)
+    $pTemperature1.text(`Temperature: `+Math.round($day1Temp)+`°F`)
+    $pHumidity1.text(`Humidity: `+$day1Humid+`%`)
 
     //day2 Add Class + Text + Attr
     $divCard2.addClass("card text-start")
@@ -221,11 +253,11 @@ function renderDivs(data) {
     $pWeather2.addClass("card-text")
     $pTemperature2.addClass("card-text")
     $pHumidity2.addClass("card-text")
-    $h42.text($day2DateText)
+    $h42.text(dayjs($day2DateText).format('MMMM DD YYYY'))
     $img2.attr("src", `https://openweathermap.org/img/wn/${$day2Icon}.png`)
     $pWeather2.text(`Description: `+$day2Desc)
-    $pTemperature2.text($day2Temp+`°F`)
-    $pHumidity2.text($day2Humid+`%`)
+    $pTemperature2.text(`Temperature: `+Math.round($day2Temp)+`°F`)
+    $pHumidity2.text(`Humidity: `+$day2Humid+`%`)
 
     //day3 Add Class +text + attr
     $divCard3.addClass("card text-start")
@@ -235,11 +267,11 @@ function renderDivs(data) {
     $pWeather3.addClass("card-text")
     $pTemperature3.addClass("card-text")
     $pHumidity3.addClass("card-text")
-    $h43.text($day3DateText)
+    $h43.text(dayjs($day3DateText).format('MMMM DD YYYY'))
     $img3.attr("src", `https://openweathermap.org/img/wn/${$day3Icon}.png`)
     $pWeather3.text(`Description: `+$day3Desc)
-    $pTemperature3.text($day3Temp+`°F`)
-    $pHumidity3.text($day3Humid+`%`)
+    $pTemperature3.text(`Temperature: `+Math.round($day3Temp)+`°F`)
+    $pHumidity3.text(`Humidity: `+$day3Humid+`%`)
 
     //day4 Add Class + text +attr
     $divCard4.addClass("card text-start")
@@ -249,11 +281,11 @@ function renderDivs(data) {
     $pWeather4.addClass("card-text")
     $pTemperature4.addClass("card-text")
     $pHumidity4.addClass("card-text")
-    $h44.text($day4DateText)
+    $h44.text(dayjs($day4DateText).format('MMMM DD YYYY'))
     $img4.attr("src", `https://openweathermap.org/img/wn/${$day4Icon}.png`)
     $pWeather4.text(`Description: `+$day4Desc)
-    $pTemperature4.text($day4Temp+`°F`)
-    $pHumidity4.text($day4Humid+`%`)
+    $pTemperature4.text(`Temperature: `+Math.round($day4Temp)+`°F`)
+    $pHumidity4.text(`Humidity: `+$day4Humid+`%`)
 
     //day5 Add Class + Text +attr
     $divCard5.addClass("card text-start")
@@ -263,13 +295,17 @@ function renderDivs(data) {
     $pWeather5.addClass("card-text")
     $pTemperature5.addClass("card-text")
     $pHumidity5.addClass("card-text")
-    $h45.text($day5DateText)
+    $h45.text(dayjs($day5DateText).format('MMMM DD YYYY'))
     $img5.attr("src", `https://openweathermap.org/img/wn/${$day5Icon}.png`)
     $pWeather5.text(`Description: `+$day5Desc)
-    $pTemperature5.text($day5Temp+`°F`)
-    $pHumidity5.text($day5Humid+`%`)
+    $pTemperature5.text(`Temperature: `+Math.round($day5Temp)+`°F`)
+    $pHumidity5.text(`Humidity: `+$day5Humid+`%`)
 
     //APPEND IT ALL!
+
+    $container5.append($resultsDiv5)
+
+
     //day1 appending
     $resultsDiv5.append($divCard1)
     $divCard1.append($divCardBody1)
@@ -314,6 +350,9 @@ function renderDivs(data) {
     $divCardBody5.append($pWeather5)
     $divCardBody5.append($pTemperature5)
     $divCardBody5.append($pHumidity5)
+
+    console.log("Holy Guacamole")
+    console.log(dayjs($day1DateText).format('MMMM DD YYYY'))
 
   }
 
@@ -364,6 +403,8 @@ function getAPI2(data){
 }
 
 $userSearchForm.submit("submit", submitEventHandler)
+
+
 
 
 console.log("script linked")
