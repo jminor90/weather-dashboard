@@ -378,14 +378,14 @@ function getAPI2(data){
   })
 }
 
-  //History Button Event Listener - when user clicks on history button runs the api again
-  $('#buttonsList').on("click", ".history-btn" , function(event) {
-    event.preventDefault()
+//History Button Event Listener - when user clicks on history button runs the api again
+$('#buttonsList').on("click", ".history-btn" , function(event) {
+  event.preventDefault()
 
-    const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${$(this).attr("data-history")}&appid=${apiKey}&units=imperial`;
+  const requestUrl = `https://api.openweathermap.org/data/2.5/weather?q=${$(this).attr("data-history")}&appid=${apiKey}&units=imperial`;
 
-    getAPI(requestUrl)
-  })
+  getAPI(requestUrl)
+})
 
 $userSearchForm.submit("submit", submitEventHandler)
 
