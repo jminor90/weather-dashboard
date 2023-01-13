@@ -7,6 +7,8 @@ const apiKey = "1551527df50cf3cb137cb6c3ce4a453b"
 const currentDate = dayjs().format('MMMM D YYYY')
 const $currentDate = $('#currentDate')
 
+//part of the Local Storage issue...
+const historyArray = JSON.parse(localStorage.getItem("data-history")) || [];
 
 //When the search form is filled and submit - needs error check if empty
 function submitEventHandler (event) {
@@ -28,7 +30,16 @@ function submitEventHandler (event) {
 
   $historyDiv.append($a)
 
+  /* Attempting to set local storage but running into errors...
+  const dataHistory = {
+    search: userSearchInput
+  }
 
+  historyArray.push(dataHistory)
+
+  localStorage.setItem("data-history", JSON.stringify(dataHistory) )
+
+  */
 
   getAPI(requestUrl)
 }
